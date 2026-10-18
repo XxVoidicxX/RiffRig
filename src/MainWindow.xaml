@@ -1,0 +1,150 @@
+<Window x:Class="RiffRig.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RiffRig" Width="1060" Height="800" MinWidth="960" MinHeight="760"
+        Background="{StaticResource BgBrush}" Foreground="{StaticResource TextBrush}"
+        WindowStartupLocation="CenterScreen" Loaded="OnLoaded" Closing="OnClosing">
+    <Border Background="{StaticResource BgBrush}" Padding="20,16,20,14">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <DockPanel Grid.Row="0" Margin="2,0,2,14">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <TextBlock Text="RIFF" FontSize="24" FontWeight="Black" Foreground="{StaticResource AccentBrush}"/>
+                <TextBlock Text="RIG" FontSize="24" FontWeight="Black"/>
+                <TextBlock Text="guitar monitor, tuner and amp" Margin="12,0,0,4" VerticalAlignment="Bottom"
+                           Foreground="{StaticResource MutedBrush}" FontSize="12"/>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- Devices -->
+        <Border Grid.Row="1" Style="{StaticResource Card}" Padding="16,12" Margin="0,0,0,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="96"/>
+                    <ColumnDefinition Width="16"/>
+                    <ColumnDefinition Width="128"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="GUITAR IN" Style="{StaticResource Caption}"/>
+                    <ComboBox x:Name="InputCombo" SelectionChanged="OnDeviceChanged"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="HEADSET OUT" Style="{StaticResource Caption}"/>
+                    <ComboBox x:Name="OutputCombo" SelectionChanged="OnDeviceChanged"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="ALSO SEND TO (VB-CABLE, OPTIONAL)" Style="{StaticResource Caption}"/>
+                    <ComboBox x:Name="SendCombo" SelectionChanged="OnDeviceChanged"/>
+                </StackPanel>
+                <StackPanel Grid.Column="6">
+                    <TextBlock Text="BUFFER" Style="{StaticResource Caption}"/>
+                    <ComboBox x:Name="LatencyCombo" SelectionChanged="OnDeviceChanged"/>
+                </StackPanel>
+                <Button x:Name="StartBtn" Grid.Column="8" Content="START" Height="44" VerticalAlignment="Bottom"
+                        HorizontalAlignment="Stretch" FontWeight="Bold" FontSize="14" Click="OnStartClick"/>
+            </Grid>
+        </Border>
+
+        <!-- Main -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.05*"/>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Tuner -->
+            <Border Grid.Column="0" Style="{StaticResource Card}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0">
+                        <TextBlock Text="TUNER" Style="{StaticResource CardTitle}" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="MuteTuneCheck" DockPanel.Dock="Right" Content="Mute while tuning"
+                                  Margin="12,0,0,0" Checked="OnMuteTune" Unchecked="OnMuteTune"/>
+                        <ComboBox x:Name="TuningCombo" DockPanel.Dock="Right" Width="190" HorizontalAlignment="Right"
+                                  SelectionChanged="OnTuningChanged"/>
+                    </DockPanel>
+
+                    <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,8">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock x:Name="NoteText" Text="-" FontSize="110" FontWeight="Black" LineHeight="110"
+                                       LineStackingStrategy="BlockLineHeight"/>
+                            <TextBlock x:Name="OctText" Text="" FontSize="28" FontWeight="Bold" Margin="4,0,0,14"
+                                       VerticalAlignment="Bottom" Foreground="{StaticResource MutedBrush}"/>
+                        </StackPanel>
+                        <TextBlock x:Name="CentsText" Text="play a string" FontSize="20" FontWeight="SemiBold"
+                                   HorizontalAlignment="Center" Foreground="{StaticResource MutedBrush}"/>
+                        <TextBlock x:Name="HzText" Text=" " FontSize="12" HorizontalAlignment="Center" Margin="0,4,0,0"
+                                   Foreground="{StaticResource MutedBrush}"/>
+                    </StackPanel>
+
+                    <Canvas x:Name="NeedleCanvas" Grid.Row="2" Height="64" Margin="6,4,6,12" ClipToBounds="True"
+                            SizeChanged="OnNeedleSize"/>
+
+                    <UniformGrid x:Name="StringsPanel" Grid.Row="3" Columns="6" Margin="0,0,0,10"/>
+
+                    <TextBlock x:Name="HintText" Grid.Row="4" Text="Tip: play one string at a time and let it ring."
+                               Foreground="{StaticResource MutedBrush}" FontSize="12" HorizontalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Amp and levels -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource Card}">
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+                            <TextBlock Text="AMP" Style="{StaticResource CardTitle}" VerticalAlignment="Center"/>
+                            <CheckBox x:Name="AmpOnCheck" DockPanel.Dock="Right" Content="On" Margin="12,0,0,0"
+                                      Checked="OnAmpControl" Unchecked="OnAmpControl"/>
+                            <ComboBox x:Name="PresetCombo" DockPanel.Dock="Right" Width="170" HorizontalAlignment="Right"
+                                      SelectionChanged="OnPresetChanged"/>
+                        </DockPanel>
+                        <UniformGrid DockPanel.Dock="Top" Columns="4" Margin="0,0,0,6">
+                            <RadioButton x:Name="CleanRadio" Content="Clean" GroupName="ch" Checked="OnAmpControl"/>
+                            <RadioButton x:Name="DriveRadio" Content="Drive" GroupName="ch" Checked="OnAmpControl"/>
+                            <CheckBox x:Name="BoostCheck" Content="Boost" Checked="OnAmpControl" Unchecked="OnAmpControl"/>
+                            <CheckBox x:Name="CabCheck" Content="Cab" Checked="OnAmpControl" Unchecked="OnAmpControl"/>
+                        </UniformGrid>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="KnobPanel"/></ScrollViewer>
+                    </DockPanel>
+                </Border>
+
+                <Border Grid.Row="2" Style="{StaticResource Card}">
+                    <StackPanel x:Name="LevelPanel"/>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- Status -->
+        <DockPanel Grid.Row="3" Margin="2,12,2,0">
+            <TextBlock x:Name="InfoText" DockPanel.Dock="Right" Foreground="{StaticResource MutedBrush}" FontSize="12"/>
+            <TextBlock x:Name="StatusText" Foreground="{StaticResource MutedBrush}" FontSize="12" TextTrimming="CharacterEllipsis"/>
+        </DockPanel>
+    </Grid>
+    </Border>
+</Window>

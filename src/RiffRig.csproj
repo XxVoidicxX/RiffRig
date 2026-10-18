@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>RiffRig</AssemblyName>
+    <RootNamespace>RiffRig</RootNamespace>
+    <Optimize>true</Optimize>
+    <TieredPGO>true</TieredPGO>
+    <NoWarn>$(NoWarn);WPF0001</NoWarn>
+    <Version>0.1.0</Version>
+    <Product>RiffRig</Product>
+    <AssemblyTitle>RiffRig</AssemblyTitle>
+    <Description>Guitar monitor, tuner and amp for USB guitar cables</Description>
+    <ApplicationIcon>..\assets\RiffRig.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="..\assets\RiffRig.ico" Link="RiffRig.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio.Core" Version="2.2.1" />
+    <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+  </ItemGroup>
+
+</Project>
